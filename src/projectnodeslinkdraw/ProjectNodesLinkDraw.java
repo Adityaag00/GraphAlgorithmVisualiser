@@ -13,10 +13,15 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.Timer;
 
 
@@ -28,15 +33,20 @@ public class ProjectNodesLinkDraw extends JPanel implements MouseListener,MouseM
     int idsel2=-1;
     int id_count=1;
     int id_count2=1;
+    int algoSelected;
     ProjectNodesLinkDraw pr=this;
     Timer tim;
     JButton btnMove,btnStart;
     ArrayList<Ball> balls=new ArrayList<>();
     ArrayList<Edge> edges=new ArrayList<>();
+    JRadioButton rbtdik = new JRadioButton("Dijkstra");
+    JRadioButton rbtdfs = new JRadioButton("DFS Algorithm");
+    JRadioButton rbtbfs = new JRadioButton("BFS Algorithm");
+    ButtonGroup grp1= new ButtonGroup();
     
     public ProjectNodesLinkDraw() {
         init();
-        
+        algoSelected=1;
         tim=new Timer(7000,new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -251,6 +261,16 @@ public class ProjectNodesLinkDraw extends JPanel implements MouseListener,MouseM
     }
     
     public void init() {
+        grp1.add(rbtdik);
+        grp1.add(rbtdfs);
+        grp1.add(rbtbfs);
+        rbtbfs.setBackground(Color.darkGray);
+        rbtdfs.setBackground(Color.darkGray);
+        rbtdik.setBackground(Color.darkGray);
+        rbtdfs.setForeground(Color.WHITE);
+        rbtbfs.setForeground(Color.WHITE);
+        rbtdik.setForeground(Color.WHITE);
+        rbtdik.setSelected(true);
         btnMove= new JButton("Move");
         btnStart = new JButton("Start");
         JPanel pnl= new JPanel();
@@ -264,9 +284,14 @@ public class ProjectNodesLinkDraw extends JPanel implements MouseListener,MouseM
         frm.getContentPane().add(this,BorderLayout.WEST);
         pnl.add(btnMove);
         pnl.add(btnStart);
-        pnl.setSize(200,720);
+        JPanel pnl2= new JPanel();
+        pnl2.add(rbtdik);
+        pnl2.add(rbtbfs);
+        pnl2.add(rbtdfs);
+        pnl2.setBackground(Color.darkGray);
         pnl.setBackground(Color.darkGray);
-        frm.getContentPane().add(pnl);
+        frm.getContentPane().add(pnl,BorderLayout.EAST);
+        frm.getContentPane().add(pnl2);
         frm.addMouseListener(this);
         frm.addMouseMotionListener(this);
         
@@ -286,10 +311,24 @@ public class ProjectNodesLinkDraw extends JPanel implements MouseListener,MouseM
         btnStart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                FrmDikstra dik= new FrmDikstra(pr);
-                Thread thrd = new Thread(dik);
-                frm.setState(JFrame.ICONIFIED);
-                thrd.start();
+                FrmAnimation dik;
+                try {
+                    if(rbtbfs.isSelected()) {
+                        algoSelected=2;
+                    }
+                    else if(rbtdik.isSelected()) {
+                        algoSelected=1;
+                    }
+                    else {
+                        algoSelected=3;
+                    }
+                    dik = new FrmAnimation(pr);
+                    Thread thrd = new Thread(dik);
+                    frm.setState(JFrame.ICONIFIED);
+                    thrd.start();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ProjectNodesLinkDraw.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
