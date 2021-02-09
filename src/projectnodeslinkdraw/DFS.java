@@ -1,7 +1,6 @@
 
 package projectnodeslinkdraw;
 
-import com.sun.glass.events.ViewEvent;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
@@ -9,8 +8,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Stack;
 
 
@@ -18,6 +15,7 @@ public class DFS {
     FrmAnimation ani;
     ProjectNodesLinkDraw dr;
     HashMap<Integer,ArrayList<Integer>> graph = new HashMap<>();
+    HashMap<Integer,String> path = new HashMap<>();
     boolean visited[];
     int ballin=-1,ballfin=-1;
     int source=1;
@@ -116,19 +114,21 @@ public class DFS {
                 System.out.print(x+" ");
     }
     
-    public void DFS2(int src) throws InterruptedException {
+    public void DFS2(int src,String Path) throws InterruptedException {
         
         if(visited[src])
             return;
         visited[src]=true;
+        path.put(src,Path);
         ballin=src;
         trav.add(src);
         ani.repaint(2000);
         
         for(int x:graph.get(src)) {
             ballfin=x;
-            ani.repaint(2000);
-            DFS2(x);
+            if(!visited[x])
+                ani.repaint(2000);
+            DFS2(x,Path+" "+x);
         }
         ballin=-1;
         ballfin=-1;
