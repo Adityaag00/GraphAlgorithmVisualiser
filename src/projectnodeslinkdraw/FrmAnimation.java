@@ -1,14 +1,9 @@
 
 package projectnodeslinkdraw;
 
-import java.awt.BasicStroke;
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.logging.Level;
@@ -95,7 +90,7 @@ public class FrmAnimation extends JPanel implements Runnable{
                     bfs.BFS(1);
                     break;
                 case 3:
-                    dfs.DFS2(1);
+                    dfs.DFS2(1,"1");
                     break;
             }
         } catch (InterruptedException ex) {
