@@ -17,6 +17,7 @@ public class BFS {
     FrmAnimation ani;
     ProjectNodesLinkDraw dr;
     HashMap<Integer,ArrayList<Integer>> graph = new HashMap<>();
+    HashMap<Integer,String> path = new HashMap<>();
     boolean visited[];
     int ballin=-1,ballfin=-1;
     int source=1;
@@ -83,11 +84,14 @@ public class BFS {
     
     public void BFS(int src) throws InterruptedException {        
         Queue<Integer> q = new LinkedList<>();
+        String Path="1";
         source=src;
         q.add(src);
+        path.put(src,Path);
 
         while(!q.isEmpty()) {
             int k=q.poll();
+            Path=path.get(k);
             trav.add(k);
             visited[k]=true;
             ani.repaint(4000);
@@ -95,6 +99,7 @@ public class BFS {
 
             for(Integer n:graph.get(k)) {
                 if(!visited[n]) {
+                    path.put(n, Path+" "+n);
                     visited[n]=true;
                     q.add(n);
                     ballfin=n;
